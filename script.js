@@ -2,10 +2,12 @@ let lenis = null;
 let isStoryUnlocked = false;
 let unlockedQuestionSecrets = [];
 let decryptedPhotoBlobUrls = {};
+let lastViewportWidth = window.innerWidth;
 
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
     gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+    ScrollTrigger.config({ ignoreMobileResize: true });
   }
 
   initLenisSmoothScroll();
@@ -15,9 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initRainSystem();
   initAudioSynthesizer();
   initConstellationGate();
-
-  initHeroForestDescentParallax();
-  initForestCollagePinAnimation();
   initForestMarquee();
 
   if (!CONFIG.isEncrypted) {
@@ -25,7 +24,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   window.addEventListener("resize", () => {
-    if (typeof ScrollTrigger !== "undefined") {
+    const currentWidth = window.innerWidth;
+    if (currentWidth === lastViewportWidth) return;
+    lastViewportWidth = currentWidth;
+    if (isStoryUnlocked && typeof ScrollTrigger !== "undefined") {
       ScrollTrigger.refresh();
     }
   });
@@ -110,6 +112,9 @@ function initStrictScrollLock() {
 
   const blockScroll = (e) => {
     if (!isStoryUnlocked) {
+      if (e.target && typeof e.target.closest === "function" && e.target.closest("#riddle-interactive-box, input, textarea, button")) {
+        return;
+      }
       e.preventDefault();
       e.stopPropagation();
       return false;
@@ -139,7 +144,10 @@ function initStarrySky() {
   if (!starCanvas) return;
   starCtx = starCanvas.getContext("2d");
 
-  function resize() {
+  let lastStarWidth = 0;
+  function resize(e) {
+    if (e && starCanvas.width === window.innerWidth && !isStoryUnlocked) return;
+    lastStarWidth = window.innerWidth;
     starCanvas.width = window.innerWidth;
     starCanvas.height = window.innerHeight;
     createStars();
@@ -229,7 +237,8 @@ function initAutumnLeavesSystem() {
   if (!autumnCanvas) return;
   autumnCtx = autumnCanvas.getContext("2d");
 
-  function resize() {
+  function resize(e) {
+    if (e && autumnCanvas.width === window.innerWidth && !isStoryUnlocked) return;
     autumnCanvas.width = window.innerWidth;
     autumnCanvas.height = window.innerHeight;
     createAutumnParticles();
@@ -579,7 +588,8 @@ function initConstellationGate() {
   if (!gateCanvas) return;
   gateCtx = gateCanvas.getContext("2d");
 
-  function resizeGate() {
+  function resizeGate(e) {
+    if (e && gateCanvas.width === window.innerWidth && !isStoryUnlocked) return;
     gateCanvas.width = window.innerWidth;
     gateCanvas.height = window.innerHeight;
     setupConstellationNodes();
@@ -1277,6 +1287,9 @@ function unlockStory() {
   isStoryUnlocked = true;
   document.documentElement.classList.remove("site-locked");
   document.body.classList.remove("site-locked");
+
+  initHeroForestDescentParallax();
+  initForestCollagePinAnimation();
 
   if (lenis) {
     lenis.start();
