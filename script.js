@@ -40,6 +40,8 @@ function initPersonalStoryContent() {
   initFullscreenTimelineDOM();
   initCountdowns();
   initFinalLetter();
+  initHeroForestDescentParallax();
+  initForestCollagePinAnimation();
   initPinnedTimelineScrollytelling();
   initBottomScenesParallax();
 }
@@ -1197,6 +1199,10 @@ function renderCurrentRiddle() {
               qText.textContent = `Entschlüssele unsere Erinnerungen... (${done} / ${totalCount})`;
             }
           });
+        }
+        document.documentElement.classList.remove("site-locked");
+        document.body.classList.remove("site-locked");
+        if (CONFIG.isEncrypted) {
           initPersonalStoryContent();
         }
         if (qText) qText.textContent = "Geschafft! Alle 5 Sterne sind verbunden.";
@@ -1288,8 +1294,10 @@ function unlockStory() {
   document.documentElement.classList.remove("site-locked");
   document.body.classList.remove("site-locked");
 
-  initHeroForestDescentParallax();
-  initForestCollagePinAnimation();
+  if (!CONFIG.isEncrypted) {
+    initHeroForestDescentParallax();
+    initForestCollagePinAnimation();
+  }
 
   if (lenis) {
     lenis.start();
@@ -1298,6 +1306,7 @@ function unlockStory() {
   setupStoryNavigation();
 
   if (typeof ScrollTrigger !== "undefined") {
+    ScrollTrigger.sort();
     setTimeout(() => {
       ScrollTrigger.refresh();
     }, 150);
@@ -1656,19 +1665,15 @@ function initFullscreenTimelineDOM() {
       <div class="milestone-stage-item ${isFirst} ${spec.layout}" data-milestone-index="${idx}" id="memory-scene-${idx}">
         <div class="milestone-visual-wrapper">
 
-          <!-- 1. Full-Bleed Storybook Forest Illustration Layer (z-index: 2) -->
           <div class="scene-bg-layer">
             <img src="${spec.bgImage}" alt="${spec.sceneLabel}" class="scene-bg-illustration" loading="${idx < 2 ? 'eager' : 'lazy'}" />
             <div class="scene-bg-scrim"></div>
           </div>
 
-          <!-- 2. Spatially Distributed Responsive Content Grid (z-index: 12 - Maximum Space Utilization!) -->
           <div class="milestone-content-grid" data-photo-count="${countAttr}">
 
-            <!-- Distributed Memory Photo Cards (Preserving Original Aspect Ratio & Optional Captions) -->
             ${photosHtml}
 
-            <!-- Story Text Card -->
             <div class="scene-story-caption">
               <div class="caption-meta-row">
                 <span class="caption-date-badge">${m.date}</span>
