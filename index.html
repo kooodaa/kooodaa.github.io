@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>Für Caro • Ein Jahr mit dir</title>
+  <title>Sternenhimmel</title>
   <link rel="icon" type="image/png" href="frog-solid.png" />
   <link rel="apple-touch-icon" href="frog-solid.png" />
 
@@ -62,9 +62,9 @@
             <span class="bracket-tag">[ Kleines Rätsel zum Start ]</span>
           </div>
 
-          <h1 class="gate-title">Bevor die Sterne unsere Geschichte erzählen...</h1>
-          <p class="gate-instruction">
-            Beantworte die 5 Fragen, um dein Sternbild Krebs zu verbinden:
+          <h1 class="gate-title">Bevor die Sterne die Geschichte erzählen...</h1>
+          <p class="gate-instruction" id="gate-instruction-text">
+            Beantworte die 5 Fragen, um das Sternbild zu verbinden:
           </p>
 
           <div class="integrated-sky-riddle" id="riddle-interactive-box">
@@ -94,7 +94,7 @@
                 <polygon points="12,2 15,9 22,12 15,15 12,22 9,15 2,12 9,9" />
               </svg>
             </div>
-            <div class="banner-headline">Sternbild Krebs vollständig! Scrolle weiter nach unten</div>
+            <div class="banner-headline" id="unlocked-banner-headline">Sternbild vollständig! Scrolle weiter nach unten</div>
             <button id="enter-story-btn" class="enter-story-action">
               <span>Weiter zum Rückblick</span>
               <svg viewBox="0 0 24 24" class="arrow-down-icon" fill="none" stroke="currentColor" stroke-width="2">
@@ -108,24 +108,22 @@
         <div class="hero-content-wrap" id="scene-hero" data-scene="hero">
           <div class="hero-glass-panel">
             <div class="hero-cosmic-tag">
-              <span class="bracket-tag">[ 30. Oktober 2026 • 1. Jahrestag ]</span>
+              <span class="bracket-tag" id="hero-tag-text"></span>
             </div>
             
-            <h2 class="cinematic-headline">
-              Ein Jahr wir zwei.<br>
-              <span class="highlight-text">Tausende Kilometer, doch so nah.</span>
+            <h2 class="cinematic-headline" id="hero-headline">
+              <span id="hero-headline-top"></span><br>
+              <span class="highlight-text" id="hero-headline-highlight"></span>
             </h2>
             
-            <p class="cinematic-intro-text">
-              Während du unter Palmen in Brasilien bist und ich im kalten deutschen Herbstregen sitze: Keine Distanz im Universum trennt, was zusammengehört.
-            </p>
+            <p class="cinematic-intro-text" id="hero-intro-text"></p>
 
             <div class="seamless-distance-hud">
               <div class="hud-station">
-                <span class="station-code">DE</span>
-                <span class="station-city" id="home-city">Oldenburg</span>
+                <span class="station-code" id="home-code">--</span>
+                <span class="station-city" id="home-city">--</span>
                 <span class="station-time" id="home-time">--:--</span>
-                <span class="station-coord">53.1° N</span>
+                <span class="station-coord" id="home-coord">--</span>
               </div>
 
               <div class="hud-trajectory">
@@ -136,19 +134,19 @@
                     <circle cx="60" cy="8" r="4" fill="#fbbf24" class="pulsar-node" />
                   </svg>
                 </div>
-                <div class="trajectory-astro" id="astro-conversion">≈ 0.00 ms Lichtzeit</div>
+                <div class="trajectory-astro" id="astro-conversion">--</div>
               </div>
 
               <div class="hud-station">
-                <span class="station-code">BR</span>
-                <span class="station-city" id="brazil-city">João Pessoa</span>
+                <span class="station-code" id="brazil-code">--</span>
+                <span class="station-city" id="brazil-city">--</span>
                 <span class="station-time" id="brazil-time">--:--</span>
-                <span class="station-coord">7.1° S</span>
+                <span class="station-coord" id="brazil-coord">--</span>
               </div>
             </div>
 
             <div class="descent-invite">
-              <span>Scrolle weiter zu unserem Rückblick</span>
+              <span>Scrolle weiter zum Rückblick</span>
               <svg viewBox="0 0 24 24" class="descent-arrow" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="6,9 12,15 18,9" />
               </svg>
@@ -169,31 +167,29 @@
             
             <div class="collage-left-col">
               <div class="collage-card collage-small" id="collage-small">
-                <img src="assets/forest-frog-pond.jpg" alt="Frösche am nächtlichen Waldteich" class="collage-art-img" loading="lazy" />
-                <span class="collage-caption-tag">Unsere Frösche am Waldteich</span>
+                <img src="assets/forest-frog-pond.jpg" alt="" class="collage-art-img" loading="lazy" />
+                <span class="collage-caption-tag"></span>
               </div>
 
               <div class="collage-card collage-medium" id="collage-medium">
-                <img src="assets/forest-witch-cottage.jpg" alt="Hexenhütte im Wald" class="collage-art-img" loading="lazy" />
-                <span class="collage-caption-tag">Lichter in der Herbstnacht</span>
+                <img src="assets/forest-witch-cottage.jpg" alt="" class="collage-art-img" loading="lazy" />
+                <span class="collage-caption-tag"></span>
               </div>
             </div>
 
             <div class="collage-right-col">
               <div class="collage-narrative-card" id="collage-narrative">
-                <span class="bracket-tag">[ Unser erstes gemeinsames Jahr ]</span>
+                <span class="bracket-tag" id="collage-tag-text"></span>
                 <h2 class="collage-big-quote">
-                  Von unserem ersten Treffen in Vechta bis zu deinem Semester in Brasilien —
-                  <strong>was wir in einem Jahr alles zusammen erlebt haben.</strong>
+                  <span id="collage-quote-lead"></span>
+                  <strong id="collage-quote-strong"></strong>
                 </h2>
-                <p class="collage-subtext">
-                  Von gemeinsamen Klausurenphasen über unser Alpenabenteuer und Spanien bis hin zu unseren langen Brasilien-Telefonaten — hier sind unsere Erinnerungen aus den letzten zwölf Monaten.
-                </p>
+                <p class="collage-subtext" id="collage-subtext"></p>
               </div>
 
               <div class="collage-card collage-big" id="collage-big">
-                <img src="assets/forest-fox.jpg" alt="Glühwürmchen auf der Waldlichtung" class="collage-art-img" loading="lazy" />
-                <span class="collage-caption-tag">Herbstzeit</span>
+                <img src="assets/forest-fox.jpg" alt="" class="collage-art-img" loading="lazy" />
+                <span class="collage-caption-tag"></span>
               </div>
             </div>
 
@@ -206,8 +202,8 @@
 
           <div class="forest-marquee-wrap" id="forest-marquee-wrap">
             <div class="forest-marquee-track" id="forest-marquee-track">
-              <span>Ein Jahr Caro &amp; Jona &nbsp;•&nbsp; Unser Jahresrückblick &nbsp;•&nbsp;</span>
-              <span>Ein Jahr Caro &amp; Jona &nbsp;•&nbsp; Unser Jahresrückblick &nbsp;•&nbsp;</span>
+              <span id="marquee-span-1"></span>
+              <span id="marquee-span-2"></span>
             </div>
           </div>
 
@@ -230,20 +226,20 @@
 
       <section class="story-scene scene-finale forest-scene" id="scene-finale" data-scene="finale">
         <div class="scene-bg-layer">
-          <img src="assets/forest-witch-cottage.jpg" alt="Gemütliche Waldhütte bei Nacht" class="scene-bg-illustration" loading="lazy" />
+          <img src="assets/forest-witch-cottage.jpg" alt="" class="scene-bg-illustration" loading="lazy" />
           <div class="scene-bg-scrim finale-scrim"></div>
         </div>
 
         <div class="finale-content-wrap gs-reveal">
           <div class="atmospheric-countdown">
-            <div class="countdown-caption">Countdown bis zu unserem Wiedersehen in Brasilien:</div>
+            <div class="countdown-caption" id="countdown-caption"></div>
             <div class="countdown-row">
               <div class="cd-item"><span id="cd-days">--</span><label>Tage</label></div>
               <div class="cd-item"><span id="cd-hours">--</span><label>Stunden</label></div>
               <div class="cd-item"><span id="cd-mins">--</span><label>Minuten</label></div>
               <div class="cd-item"><span id="cd-secs">--</span><label>Sekunden</label></div>
             </div>
-            <div class="reunion-note" id="reunion-days-left">Nicht mehr lange, bis ich im Flieger nach Brasilien sitze und wir uns endlich wiedersehen!</div>
+            <div class="reunion-note" id="reunion-days-left"></div>
           </div>
 
           <div class="cinematic-letter-parchment">
@@ -253,13 +249,12 @@
               </svg>
             </div>
             <div class="parchment-header">
-              <h3 id="final-letter-title">Zum ersten Jahrestag</h3>
-              <span id="final-letter-date">30. Oktober 2026</span>
+              <h3 id="final-letter-title"></h3>
+              <span id="final-letter-date"></span>
             </div>
             <div class="parchment-body" id="final-letter-text">
             </div>
-            <div class="parchment-signoff">
-              Dein Jona
+            <div class="parchment-signoff" id="final-letter-signoff">
             </div>
           </div>
         </div>

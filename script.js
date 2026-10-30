@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initPersonalStoryContent() {
+  initDecryptedUITexts();
   initDualClocksAndDistance();
   initIntroCollagePhotos();
   initFullscreenTimelineDOM();
@@ -39,6 +40,34 @@ function initPersonalStoryContent() {
   initFinalLetter();
   initPinnedTimelineScrollytelling();
   initBottomScenesParallax();
+}
+
+function initDecryptedUITexts() {
+  const ui = CONFIG.uiTexts || {};
+  const setTxt = (id, val) => {
+    const el = document.getElementById(id);
+    if (el && typeof val === "string") el.textContent = val;
+  };
+
+  if (ui.pageTitle) document.title = ui.pageTitle;
+  setTxt("unlocked-banner-headline", ui.unlockedBannerHeadline);
+  setTxt("hero-tag-text", ui.heroTag);
+  setTxt("hero-headline-top", ui.heroHeadlineTop);
+  setTxt("hero-headline-highlight", ui.heroHeadlineHighlight);
+  setTxt("hero-intro-text", ui.heroIntroText);
+  setTxt("home-code", ui.homeCode);
+  setTxt("home-coord", ui.homeCoord);
+  setTxt("brazil-code", ui.brazilCode);
+  setTxt("brazil-coord", ui.brazilCoord);
+  setTxt("collage-tag-text", ui.collageTag);
+  setTxt("collage-quote-lead", ui.collageQuoteLead);
+  setTxt("collage-quote-strong", ui.collageQuoteStrong);
+  setTxt("collage-subtext", ui.collageSubtext);
+  setTxt("marquee-span-1", ui.marqueeText);
+  setTxt("marquee-span-2", ui.marqueeText);
+  setTxt("countdown-caption", ui.countdownCaption);
+  setTxt("reunion-days-left", ui.countdownNote);
+  setTxt("final-letter-signoff", ui.letterSignoff);
 }
 
 function initLenisSmoothScroll() {
@@ -1090,7 +1119,7 @@ async function decryptFullStoryVault(onProgress) {
   const vaultData = JSON.parse(new TextDecoder().decode(vaultPtBytes));
   Object.assign(CONFIG, vaultData);
 
-  const encPhotos = window.__ENCRYPTED_PHOTOS__ || {};
+  const encPhotos = CONFIG.encryptedPhotos || window.__ENCRYPTED_PHOTOS__ || {};
   const entries = Object.entries(encPhotos);
   const totalMedia = entries.length;
   let completedMedia = 0;
@@ -1207,7 +1236,22 @@ function renderCurrentRiddle() {
 
     if (unlockedSlot) {
       if (unlockedSlot.secret) {
-        unlockedQuestionSecrets[solvedQuizCount] = base64ToBytes(unlockedSlot.secret);
+        const currentSecretBytes = base64ToBytes(unlockedSlot.secret);
+        unlockedQuestionSecrets[solvedQuizCount] = currentSecretBytes;
+
+        const nextQ = CONFIG.quiz[solvedQuizCount + 1];
+        if (nextQ && nextQ.encryptedMeta && nextQ.encryptedMeta.iv && nextQ.encryptedMeta.ct) {
+          try {
+            const metaBytes = await aesGcmDecryptWithRawKey(
+              currentSecretBytes,
+              nextQ.encryptedMeta.iv,
+              nextQ.encryptedMeta.ct
+            );
+            const metaObj = JSON.parse(new TextDecoder().decode(metaBytes));
+            if (metaObj.question) nextQ.question = metaObj.question;
+            if (metaObj.placeholder) nextQ.placeholder = metaObj.placeholder;
+          } catch (_) {}
+        }
       }
       if (gateNodes[solvedQuizCount]) gateNodes[solvedQuizCount].solved = true;
       if (window._playChime) window._playChime(solvedQuizCount);
@@ -1976,6 +2020,7 @@ function initDualClocksAndDistance() {
 
 function initCountdowns() {
   const reunionTarget = new Date(CONFIG.reunionDate).getTime();
+  const ui = CONFIG.uiTexts || {};
 
   function update() {
     const now = new Date().getTime();
@@ -1998,16 +2043,16 @@ function initCountdowns() {
       if (hoursEl) hoursEl.textContent = String(hours).padStart(2, "0");
       if (minsEl) minsEl.textContent = String(mins).padStart(2, "0");
       if (secsEl) secsEl.textContent = String(secs).padStart(2, "0");
-      if (noteEl) {
-        noteEl.textContent = "Nicht mehr lange, bis ich im Flieger nach Brasilien sitze und wir uns endlich wiedersehen!";
+      if (noteEl && ui.countdownNote) {
+        noteEl.textContent = ui.countdownNote;
       }
     } else {
       if (daysEl) daysEl.textContent = "00";
       if (hoursEl) hoursEl.textContent = "00";
       if (minsEl) minsEl.textContent = "00";
       if (secsEl) secsEl.textContent = "00";
-      if (capEl) capEl.textContent = "Endlich in Brasilien!";
-      if (noteEl) noteEl.textContent = "Zeit für unsere gemeinsame Zeit vor Ort.";
+      if (capEl && ui.countdownFinishedCaption) capEl.textContent = ui.countdownFinishedCaption;
+      if (noteEl && ui.countdownFinishedNote) noteEl.textContent = ui.countdownFinishedNote;
     }
   }
 
